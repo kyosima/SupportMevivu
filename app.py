@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, session, request, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from flaskext.mysql import MySQL
 from datetime import timedelta
 
@@ -17,8 +18,6 @@ app.config['MYSQL_DATABASE_DB'] = 'support_mevivu'
 
 conn = mysql.connect()
 curs = conn.cursor()
-
-print('Connect success!')
 
 @app.before_request
 def before_request():
@@ -46,9 +45,10 @@ def getProfile():
         lastname = rows[7]
         phone = rows[8]
         role = rows[9]
+        avatar = rows[10]
 
 
-        return render_template('profile.html', username = username, email = email, createdDate = createdDate, firstname = firstname, lastname = lastname, phone = phone,role=role)
+        return render_template('profile.html', username = username, email = email, createdDate = createdDate, firstname = firstname, lastname = lastname, phone = phone,role=role, avatar = avatar)
     else:
         return redirect(url_for('getLogin'))
 
@@ -66,7 +66,10 @@ def getEditProfile():
         lastname = rows[7]
         phone = rows[8]
         role = rows[9]
-        return render_template('editProfile.html', email=email, username=username, password=password, firstname=firstname, lastname=lastname, phone=phone, role=role)
+        avatarbob = rows[10]
+        avatar = secure_filename(avatarbob)
+
+        return render_template('editProfile.html', email=email, username=username, password=password, firstname=firstname, lastname=lastname, phone=phone, role=role, avatar=avatar)
     else:
         return redirect(url_for('getLogin'))
 
@@ -80,10 +83,11 @@ def postEditProfile():
         _phone = request.form.get('inputPhone', None)
         _role = request.form.get('inputRole', None)
         _password = request.form.get('inputPassword', None)
+        _avatar = request.form.get('inputAvatar')
         hashpassword = generate_password_hash(_password)
 
 
-        sql = "update Users set firstName = '{0}', lastName='{1}', email='{2}', phone='{3}', profession ='{4}', passWord ='{5}' where userName = '{6}'".format(_firstname, _lastname,_email, _phone, _role,hashpassword, username)
+        sql = "update Users set firstName = '{0}', lastName='{1}', email='{2}', phone='{3}', profession ='{4}', passWord ='{5}', avatar = '{6}' where userName = '{7}'".format(_firstname, _lastname,_email, _phone, _role,hashpassword,_avatar, username)
         curs.execute(sql)
         conn.commit()
 
