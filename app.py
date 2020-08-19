@@ -3,6 +3,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from flaskext.mysql import MySQL
 from datetime import timedelta
+import tkinter
+from tkinter import messagebox
+
 
 app = Flask(__name__)
 app.secret_key = 'key'
@@ -67,9 +70,8 @@ def getEditProfile():
         phone = rows[8]
         role = rows[9]
         avatarbob = rows[10]
-        avatar = secure_filename(avatarbob)
 
-        return render_template('editProfile.html', email=email, username=username, password=password, firstname=firstname, lastname=lastname, phone=phone, role=role, avatar=avatar)
+        return render_template('editProfile.html', email=email, username=username, password=password, firstname=firstname, lastname=lastname, phone=phone, role=role)
     else:
         return redirect(url_for('getLogin'))
 
@@ -85,13 +87,31 @@ def postEditProfile():
         _password = request.form.get('inputPassword', None)
         _avatar = request.form.get('inputAvatar')
         hashpassword = generate_password_hash(_password)
-
-
-        sql = "update Users set firstName = '{0}', lastName='{1}', email='{2}', phone='{3}', profession ='{4}', passWord ='{5}', avatar = '{6}' where userName = '{7}'".format(_firstname, _lastname,_email, _phone, _role,hashpassword,_avatar, username)
-        curs.execute(sql)
-        conn.commit()
-
-        return redirect(url_for('getProfile'))
+        _currentpassword = request.form.get('inputCurrentPassword',None)
+        sql0 = "select passWord from Users where userName='{0}'".format(username)
+        curs.execute(sql0)
+        rows = curs.fetchone()
+        hashedpassword = rows[0]
+        if check_password_hash(hashedpassword, _currentpassword):
+            sql = "update Users set firstName = '{0}', lastName='{1}', email='{2}', phone='{3}', profession ='{4}', passWord ='{5}', avatar = '{6}' where userName = '{7}'".format(
+                _firstname, _lastname, _email, _phone, _role, hashpassword, _avatar, username)
+            curs.execute(sql)
+            conn.commit()
+            return redirect(url_for('getProfile'))
+        else:
+            sql = "select * from Users where userName='{0}'".format(username)
+            curs.execute(sql)
+            rows = curs.fetchone()
+            email = rows[2]
+            password = rows[3]
+            createdDate = rows[5]
+            firstname = rows[6]
+            lastname = rows[7]
+            phone = rows[8]
+            role = rows[9]
+            avatarbob = rows[10]
+            errors = 'Current password is not correct!'
+            return render_template('editProfile.html',errors = errors,email=email, username=username, password=password, firstname=firstname, lastname=lastname, phone=phone, role=role)
     except Exception as e:
         raise (e)
 
