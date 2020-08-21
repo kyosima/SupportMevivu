@@ -7,14 +7,15 @@ from flask_mail import Mail, Message
 
 app = Flask(__name__)
 app.secret_key = 'key'
-mail = Mail(app)
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'btvu282@gmail.com'
-app.config['MAIL_PASSWORD'] = 'malouda15'
+app.config['MAIL_PASSWORD'] = 'wxcyznoitkarirnk'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
+
 
 mysql = MySQL()
 mysql.init_app(app)
@@ -32,12 +33,16 @@ def before_request():
     app.permanent_session_lifetime = timedelta(minutes=3)
 
 
-@app.route("/sendmail", methods=['get'])
+@app.route("/sendemail")
 def sendEmail():
-    msg = Message("Hello",
-                  sender="from@example.com",
-                  recipients=["to@example.com"])
-    return mail.send(msg)
+   msg = Message(
+                'Hello',
+                sender ='btvu282@gmail.com',
+                recipients = ['nc.hung0806@gmail.com']
+               )
+   msg.body = 'Hello Flask message sent from Flask-Mail'
+   mail.send(msg)
+   return 'Sent'
 
 
 @app.route('/', methods=['GET'])
