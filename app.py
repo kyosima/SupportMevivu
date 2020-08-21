@@ -52,6 +52,35 @@ def index():
         return render_template('index.html', username=username)
     else:
         return redirect(url_for('getLogin'))
+@app.route('/editPassword',methods=['GET'])
+def getEditpassword():
+    if 'username' in session:
+        return render_template('editPassword.html')
+    else:
+        return redirect(url_for('getLogin'))
+
+@app.route('/editPassword', methods=['POST'])
+def postEditpassword():
+    try:
+        username = session['username']
+        _currentpassword = request.form.get('inputCurrentPass')
+        _newpassword = request.form.get('inputPassword')
+        newhashpassword = generate_password_hash(_newpassword)
+        sql = "select passWord from Users where userName = '{0}'".format(username)
+        curs.execute(sql)
+        rows = curs.fetchone()
+        hashpasword = rows[0]
+        if check_password_hash(hashpasword, _currentpassword):
+            sql1 = "update Users set passWord ='{0}' where userName = '{1}'".format(newhashpassword, username)
+            curs.execute(sql1)
+            conn.commit()
+            return redirect(url_for('getProfile'))
+        else:
+            errors = 'Wrong Current Password'
+            return render_template('editPassword.html', errors = errors)
+    except Exception as e:
+        raise (e)
+
 
 
 @app.route('/profile', methods=['get'])
@@ -68,9 +97,10 @@ def getProfile():
         phone = rows[8]
         role = rows[9]
         avatar = rows[10]
-        print()
+        birthday = rows[11]
+
         return render_template('profile.html', username=username, email=email, createdDate=createdDate,
-                               firstname=firstname, lastname=lastname, phone=phone, role=role, avatar=avatar)
+                               firstname=firstname, lastname=lastname, phone=phone, role=role, avatar=avatar,birthday = birthday)
     else:
         return redirect(url_for('getLogin'))
 
@@ -90,9 +120,10 @@ def getEditProfile():
         phone = rows[8]
         role = rows[9]
         avatarbob = rows[10]
+        birthday = rows[11]
 
         return render_template('editProfile.html', email=email, username=username, password=password,
-                               firstname=firstname, lastname=lastname, phone=phone, role=role)
+                               firstname=firstname, lastname=lastname, phone=phone, role=role,birthday = birthday)
     else:
         return redirect(url_for('getLogin'))
 
@@ -106,36 +137,18 @@ def postEditProfile():
         _email = request.form.get('inputEmail', None)
         _phone = request.form.get('inputPhone', None)
         _role = request.form.get('inputRole', None)
-        _password = request.form.get('inputPassword', None)
         _avatar = request.form.get('inputAvatar', None)
-        hashpassword = generate_password_hash(_password)
-        _currentpassword = request.form.get('inputCurrentPassword', None)
+        _birthday = request.form.get('inputBirthday', None)
         sql0 = "select passWord from Users where userName='{0}'".format(username)
         curs.execute(sql0)
         rows = curs.fetchone()
         hashedpassword = rows[0]
-        if check_password_hash(hashedpassword, _currentpassword):
-            sql = "update Users set firstName = '{0}', lastName='{1}', email='{2}', phone='{3}', profession ='{4}', " \
-                  "passWord ='{5}', avatar = '{6}' where userName = '{7}'".format(
-                _firstname, _lastname, _email, _phone, _role, hashpassword, _avatar, username)
-            curs.execute(sql)
-            conn.commit()
-            return redirect(url_for('getProfile'))
-        else:
-            sql = "select * from Users where userName='{0}'".format(username)
-            curs.execute(sql)
-            rows = curs.fetchone()
-            email = rows[2]
-            password = rows[3]
-            createdDate = rows[5]
-            firstname = rows[6]
-            lastname = rows[7]
-            phone = rows[8]
-            role = rows[9]
-            avatarbob = rows[10]
-            errors = 'Current password is not correct!'
-            return render_template('editProfile.html', errors=errors, email=email, username=username, password=password,
-                                   firstname=firstname, lastname=lastname, phone=phone, role=role)
+        sql = "update Users set firstName = '{0}', lastName='{1}', email='{2}', phone='{3}', profession ='{4}', " \
+              "avatar = '{5}',birthDay='{6}' where userName = '{7}'".format(
+            _firstname, _lastname, _email, _phone, _role,  _avatar, _birthday, username)
+        curs.execute(sql)
+        conn.commit()
+        return redirect(url_for('getProfile'))
     except Exception as e:
         raise (e)
 
@@ -160,7 +173,6 @@ def postLogin():
         errors = []
         _username = request.form.get('inputUsername', None)
         _password = request.form.get('inputPassword', None)
-        print(generate_password_hash('123'))
 
         sql = "select passWord from Users where userName = '{0}'".format(_username)
         curs.execute(sql)
