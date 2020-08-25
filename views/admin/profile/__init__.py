@@ -10,7 +10,7 @@ profile_blp = Blueprint('profile_blp', __name__)
 def getEditpassword():
     if 'username' in session:
 
-        return render_template('editPassword.html')
+        return render_template('admin/editPassword.html')
     else:
         return redirect(url_for('login_blp.getLogin'))
 
@@ -32,7 +32,7 @@ def postEditpassword():
             return redirect(url_for('profile_blp.getProfile'))
         else:
             errors = 'Wrong Current Password'
-            return render_template('editPassword.html', errors = errors)
+            return render_template('admin/editPassword.html', errors = errors)
     except Exception as e:
         raise (e)
 
@@ -55,8 +55,8 @@ def getProfile():
         birthday = rows[11]
 
 
-        return render_template('profile.html', username=username, email=email, createdDate=createdDate,
-                               firstname=firstname, lastname=lastname, phone=phone, role=role, avatar=avatar,birthday = birthday)
+        return render_template('admin/profile.html', username=username, email=email, createdDate=createdDate,
+                               firstname=firstname, lastname=lastname, phone=phone, role=role, avatar=avatar, birthday = birthday)
     else:
         return redirect(url_for('login_blp.getLogin'))
 
@@ -80,8 +80,8 @@ def getEditProfile():
 
 
 
-        return render_template('editProfile.html', email=email, username=username, password=password,
-                               firstname=firstname, lastname=lastname, phone=phone, role=role,birthday = birthday, avatar = avatar)
+        return render_template('admin/editProfile.html', email=email, username=username, password=password,
+                               firstname=firstname, lastname=lastname, phone=phone, role=role, birthday = birthday, avatar = avatar)
     else:
         return redirect(url_for('profile_blp.getLogin'))
 

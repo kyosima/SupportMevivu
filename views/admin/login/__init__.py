@@ -13,9 +13,9 @@ def logout():
 @login_blp.route('/login', methods=['GET'])
 def getLogin():
     if 'username' in session:
-        return render_template('index.html')
+        return render_template('admin/index.html')
     else:
-        return render_template('login.html')
+        return render_template('admin/login.html')
 
 
 @login_blp.route('/login', methods=['POST'])
@@ -36,6 +36,6 @@ def postLogin():
                 return redirect(url_for('index_blp.index'))
             else:
                 errors = 'Wrong username or password!'
-                return render_template('login.html', errors=errors)
+                return render_template('admin/login.html', errors=errors)
     except Exception as e:
         raise (e)

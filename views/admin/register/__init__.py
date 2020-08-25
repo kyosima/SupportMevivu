@@ -7,9 +7,9 @@ register_blp = Blueprint('register_blp', __name__)
 @register_blp.route('/register', methods=['GET'])
 def getRegister():
     if 'username' in session:
-        return render_template('index.html')
+        return render_template('admin/index.html')
     else:
-        return render_template('register.html')
+        return render_template('admin/register.html')
 
 
 @register_blp.route('/register', methods=['POST'])
@@ -27,7 +27,7 @@ def postRegister():
         rows = curs.fetchone()
         if rows and rows[0] > 0:
             errors = 'Username already exits!'
-            return render_template('register.html', errors=errors)
+            return render_template('admin/register.html', errors=errors)
         elif _firstname and _lastname and _username and _email and _password:
             sql1 = "insert into Users(firstName, lastName, userName, email, passWord) values ('{0}', '{1}', '{2}', " \
                    "'{3}', '{4}')".format(

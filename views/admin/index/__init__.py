@@ -15,6 +15,6 @@ def before_request():
 def index():
     if 'username' in session:
         username = session['username']
-        return render_template('index.html', username=username)
+        return render_template('admin/index.html', username=username)
     else:
         return redirect(url_for('login_blp.getLogin'))
