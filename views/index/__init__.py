@@ -5,12 +5,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from views import app,curs
 
 index_blp  = Blueprint('index_blp', __name__)
-print(generate_password_hash('123'))
 
 @index_blp.before_request
 def before_request():
     session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=3)
+    app.permanent_session_lifetime = timedelta(minutes=30)
 
 @index_blp.route('/', methods=['GET'])
 def index():

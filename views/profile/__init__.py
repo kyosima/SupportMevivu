@@ -1,12 +1,15 @@
 from flask import render_template, url_for, session, request, redirect, Blueprint
 from werkzeug.security import generate_password_hash, check_password_hash
-from views import curs, conn
+from views import curs, conn, app
+import os
+from werkzeug.utils import secure_filename
 
 profile_blp = Blueprint('profile_blp', __name__)
 
 @profile_blp.route('/editPassword',methods=['GET'])
 def getEditpassword():
     if 'username' in session:
+
         return render_template('editPassword.html')
     else:
         return redirect(url_for('login_blp.getLogin'))
@@ -51,6 +54,7 @@ def getProfile():
         avatar = rows[10]
         birthday = rows[11]
 
+
         return render_template('profile.html', username=username, email=email, createdDate=createdDate,
                                firstname=firstname, lastname=lastname, phone=phone, role=role, avatar=avatar,birthday = birthday)
     else:
@@ -71,36 +75,56 @@ def getEditProfile():
         lastname = rows[7]
         phone = rows[8]
         role = rows[9]
-        avatarbob = rows[10]
+        avatar = rows[10]
         birthday = rows[11]
 
+
+
         return render_template('editProfile.html', email=email, username=username, password=password,
-                               firstname=firstname, lastname=lastname, phone=phone, role=role,birthday = birthday)
+                               firstname=firstname, lastname=lastname, phone=phone, role=role,birthday = birthday, avatar = avatar)
     else:
         return redirect(url_for('profile_blp.getLogin'))
+
+
 
 
 @profile_blp.route('/editProfile', methods=['post'])
 def postEditProfile():
     try:
-        username = session['username']
-        _firstname = request.form.get('inputFirstname', None)
-        _lastname = request.form.get('inputLastname', None)
-        _email = request.form.get('inputEmail', None)
-        _phone = request.form.get('inputPhone', None)
-        _role = request.form.get('inputRole', None)
-        _avatar = request.form.get('inputAvatar', None)
-        _birthday = request.form.get('inputBirthday', None)
-        sql0 = "select passWord from Users where userName='{0}'".format(username)
-        curs.execute(sql0)
-        rows = curs.fetchone()
-        hashedpassword = rows[0]
-        sql = "update Users set firstName = '{0}', lastName='{1}', email='{2}', phone='{3}', profession ='{4}', " \
-              "avatar = '{5}',birthDay='{6}' where userName = '{7}'".format(
-            _firstname, _lastname, _email, _phone, _role,  _avatar, _birthday, username)
-        curs.execute(sql)
-        conn.commit()
-        return redirect(url_for('profile_blp.getProfile'))
+        if request.form['submit'] == 'SaveAvatar':
+            if request.files:
+                username = session['username']
+
+                _avatar = request.files["image"]
+                filename = secure_filename(_avatar.filename)
+                _avatar.save(os.path.join(app.config["IMAGE_UPLOADS"], filename))
+
+                sql = "update Users set avatar='{0}' where userName = '{1}'".format(filename, username)
+                curs.execute(sql)
+                conn.commit()
+                return redirect(url_for('profile_blp.getProfile'))
+
+        elif request.form['submit'] == 'SaveProfile':
+            username = session['username']
+            _firstname = request.form.get('inputFirstname', None)
+            _lastname = request.form.get('inputLastname', None)
+            _email = request.form.get('inputEmail', None)
+            _phone = request.form.get('inputPhone', None)
+            _role = request.form.get('inputRole', None)
+            _avatar1 = request.form.get('inputAvatar', None)
+
+            _birthday = request.form.get('inputBirthday', None)
+            sql0 = "select passWord from Users where userName='{0}'".format(username)
+            curs.execute(sql0)
+            rows = curs.fetchone()
+            hashedpassword = rows[0]
+            sql = "update Users set firstName = '{0}', lastName='{1}', email='{2}', phone='{3}', profession ='{4}', " \
+                  "avatar = '{5}',birthDay='{6}' where userName = '{7}'".format(
+                _firstname, _lastname, _email, _phone, _role,  _avatar1, _birthday, username)
+            curs.execute(sql)
+            conn.commit()
+            return redirect(url_for('profile_blp.getProfile'))
+
+
     except Exception as e:
         raise (e)
-
