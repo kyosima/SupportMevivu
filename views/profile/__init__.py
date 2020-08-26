@@ -6,13 +6,27 @@ from werkzeug.utils import secure_filename
 
 profile_blp = Blueprint('profile_blp', __name__)
 
-@profile_blp.route('/editPassword',methods=['GET'])
+
+@profile_blp.route('/editPassword', methods=['GET'])
 def getEditpassword():
     if 'username' in session:
+        username = session['username']
+        sql = "select * from Users where userName='{0}'".format(username)
+        curs.execute(sql)
+        rows = curs.fetchone()
 
-        return render_template('admin/editPassword.html')
+        firstname = rows[6]
+        lastname = rows[7]
+
+        avatar = rows[10]
+
+        pagetitle = 'Thông tin'
+        title = 'Thông tin'
+        return render_template('admin/editPassword.html', firstname=firstname, lastname=lastname, avatar=avatar,
+                               pagetitle=pagetitle, title=title)
     else:
         return redirect(url_for('login_blp.getLogin'))
+
 
 @profile_blp.route('/editPassword', methods=['POST'])
 def postEditpassword():
@@ -32,10 +46,9 @@ def postEditpassword():
             return redirect(url_for('profile_blp.getProfile'))
         else:
             errors = 'Wrong Current Password'
-            return render_template('admin/editPassword.html', errors = errors)
+            return render_template('admin/editPassword.html', errors=errors)
     except Exception as e:
         raise (e)
-
 
 
 @profile_blp.route('/profile', methods=['get'])
@@ -53,10 +66,18 @@ def getProfile():
         role = rows[9]
         avatar = rows[10]
         birthday = rows[11]
-
-
-        return render_template('admin/profile.html', username=username, email=email, createdDate=createdDate,
-                               firstname=firstname, lastname=lastname, phone=phone, role=role, avatar=avatar, birthday = birthday)
+        pagetitle = 'Thông tin'
+        title = 'Thông tin'
+        if role == 1:
+            level = 'Admin'
+        elif role == 2:
+            level = 'Kỹ thuật viên'
+        elif role == 3:
+            level = 'Khách hàng'
+        return render_template('admin/profile.html', title=title, pagetitle=pagetitle, username=username, email=email,
+                               createdDate=createdDate,
+                               firstname=firstname, lastname=lastname,role=level, phone=phone, avatar=avatar,
+                               birthday=birthday)
     else:
         return redirect(url_for('login_blp.getLogin'))
 
@@ -77,15 +98,14 @@ def getEditProfile():
         role = rows[9]
         avatar = rows[10]
         birthday = rows[11]
+        pagetitle = 'Thay đổi thông tin'
 
-
-
-        return render_template('admin/editProfile.html', email=email, username=username, password=password,
-                               firstname=firstname, lastname=lastname, phone=phone, role=role, birthday = birthday, avatar = avatar)
+        return render_template('admin/editProfile.html', pagetitle=pagetitle, email=email, username=username,
+                               password=password,
+                               firstname=firstname, lastname=lastname, phone=phone, role=role, birthday=birthday,
+                               avatar=avatar)
     else:
         return redirect(url_for('profile_blp.getLogin'))
-
-
 
 
 @profile_blp.route('/editProfile', methods=['post'])
@@ -118,9 +138,9 @@ def postEditProfile():
             curs.execute(sql0)
             rows = curs.fetchone()
             hashedpassword = rows[0]
-            sql = "update Users set firstName = '{0}', lastName='{1}', email='{2}', phone='{3}', profession ='{4}', " \
-                  "avatar = '{5}',birthDay='{6}' where userName = '{7}'".format(
-                _firstname, _lastname, _email, _phone, _role,  _avatar1, _birthday, username)
+            sql = "update Users set firstName = '{0}', lastName='{1}', email='{2}', phone='{3}', levels ='{4}'," \
+                  "birthDay='{5}' where userName = '{6}'".format(
+                _firstname, _lastname, _email, _phone, _role, _birthday, username)
             curs.execute(sql)
             conn.commit()
             return redirect(url_for('profile_blp.getProfile'))

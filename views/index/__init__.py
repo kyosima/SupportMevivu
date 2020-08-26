@@ -15,6 +15,14 @@ def before_request():
 def index():
     if 'username' in session:
         username = session['username']
-        return render_template('admin/index.html', username=username)
+        title = 'Admin'
+        sql = "select * from Users where userName = '{0}'".format(username)
+        curs.execute(sql)
+        rows = curs.fetchone()
+        avatar = rows[10]
+        firstname = rows[6]
+        lastname = rows[7]
+        pagetitle = "Tổng quan"
+        return render_template('admin/index.html', username=username, title = title, avatar=avatar, firstname=firstname, lastname=lastname, pagetitle=pagetitle)
     else:
         return redirect(url_for('login_blp.getLogin'))
