@@ -22,10 +22,12 @@ from views.login import login_blp
 from views.profile import profile_blp
 from views.register import register_blp
 from views.listSupporter import listSupperter_blp
+from views.listCustomer import listCustomer_blp
 
 app.register_blueprint(index_blp)
 app.register_blueprint(login_blp)
 app.register_blueprint(profile_blp)
 app.register_blueprint(register_blp)
 app.register_blueprint(listSupperter_blp)
+app.register_blueprint(listCustomer_blp)
 

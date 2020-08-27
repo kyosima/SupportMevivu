@@ -4,29 +4,29 @@ from views import curs, conn, app
 import os
 from werkzeug.utils import secure_filename
 
-listSupperter_blp = Blueprint('listSupporter_blp', __name__)
+listCustomer_blp = Blueprint('listCustomer_blp', __name__)
 
 
-@listSupperter_blp.route('/listSupporter', methods=['get'])
-def getListSupporter():
+@listCustomer_blp.route('/listCustomer', methods=['get'])
+def getListCustomer():
     if 'username' in session:
         username = session['username']
-        pagetitle = 'Danh sách kỹ thuật viên'
-        title = 'Danh sách kỹ thuật viên'
-        sql0 = "select * from Users where levels ='2'"
+        pagetitle = 'Danh sách khách hàng'
+        title = 'Danh sách khách hàng'
+        sql0 = "select * from Users where levels ='3'"
         curs.execute(sql0)
         rows = curs.fetchall()
-        return render_template('admin/listSupporter.html', pagetitle=pagetitle, title=title, rows=rows)
+        return render_template('admin/listCustomer.html', pagetitle=pagetitle, title=title, rows=rows)
     else:
         return redirect(url_for('login_blp.getLogin'))
 
 
-@listSupperter_blp.route('/editSupporter/<id>', methods=['get'])
-def getEditSupporter(id):
+@listCustomer_blp.route('/editCustomer/<id>', methods=['get'])
+def getEditCustomer(id):
     if 'username' in session:
         username = session['username']
-        pagetittle = 'Thay đổi thông tin Kỹ thuật viên'
-        title = 'Thay đổi thông tin Kỹ thuật viên'
+        pagetittle = 'Thay đổi thông tin Khách hàng'
+        title = 'Thay đổi thông tin Khách hàng'
         sql0 = "select * from Users where id='{0}'".format(id)
         curs.execute(sql0)
         rows = curs.fetchone()
@@ -37,10 +37,10 @@ def getEditSupporter(id):
         phone = rows[8]
         levels = rows[9]
         birthday = rows[11]
-        return render_template('admin/editSupporter.html', pagetittle=pagetittle, title=title, username=username,
+        return render_template('admin/editCustomer.html', pagetittle=pagetittle, title=title, username=username,
                                email=email, firstname=firstname, lastname=lastname, levels=levels,phone=phone, birthday=birthday)
-@listSupperter_blp.route('/editSupporter/<id>', methods=['post'])
-def postEditSupporter(id):
+@listCustomer_blp.route('/editCustomer/<id>', methods=['post'])
+def postEditCustomer(id):
     try:
         if 'username' in session:
             pagetitle = 'Thông tin Kỹ thuật viên'
@@ -56,6 +56,13 @@ def postEditSupporter(id):
             sql1 = "select * from Users where id='{0}'".format(id)
             curs.execute(sql1)
             rows = curs.fetchone()
-            return redirect(url_for('listSupporter_blp.getListSupporter'))
+            username = rows[1]
+            email = rows[2]
+            firstname = rows[6]
+            lastname = rows[7]
+            phone = rows[8]
+            levels = rows[9]
+            birthday = rows[11]
+            return redirect(url_for('listCustomer_blp.getListCustomer'))
     except Exception as e:
         raise (e)
