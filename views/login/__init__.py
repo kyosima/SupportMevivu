@@ -62,7 +62,7 @@ def postLogin():
             hashpassword_supporter = rows1[0]
             if check_password_hash(hashpassword_supporter, _password):
                 session['username'] = _username
-                return render_template('Supporter/indexSupporter.html')
+                return redirect(url_for('index_blp.index'))
             else:
                 errors = 'Wrong username or password!'
                 return render_template('admin/login.html', errors=errors)
