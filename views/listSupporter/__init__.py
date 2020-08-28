@@ -13,10 +13,12 @@ def getListSupporter():
         username = session['username']
         pagetitle = 'Danh sách kỹ thuật viên'
         title = 'Danh sách kỹ thuật viên'
+        custombutton = 'Thêm kỹ thuật viên'
         sql0 = "select * from Users where levels ='2'"
         curs.execute(sql0)
         rows = curs.fetchall()
-        return render_template('admin/listSupporter.html', pagetitle=pagetitle, title=title, rows=rows)
+        avatar = session['avatar']
+        return render_template('admin/listSupporter.html', pagetitle=pagetitle, title=title, rows=rows, custombutton=custombutton, avatar=avatar, username=username)
     else:
         return redirect(url_for('login_blp.getLogin'))
 
@@ -30,15 +32,16 @@ def getEditSupporter(id):
         sql0 = "select * from Users where id='{0}'".format(id)
         curs.execute(sql0)
         rows = curs.fetchone()
-        username = rows[1]
+        usernamesp = rows[1]
         email = rows[2]
         firstname = rows[6]
         lastname = rows[7]
         phone = rows[8]
         levels = rows[9]
         birthday = rows[11]
-        return render_template('admin/editSupporter.html', pagetittle=pagetittle, title=title, username=username,
-                               email=email, firstname=firstname, lastname=lastname, levels=levels,phone=phone, birthday=birthday)
+        avatar = session['avatar']
+        return render_template('admin/editSupporter.html', avatar=avatar, usernamesp=usernamesp, pagetittle=pagetittle, title=title, username=username,
+                               email=email, firstname=firstname, lastname=lastname, levels=levels, phone=phone, birthday=birthday)
 @listSupperter_blp.route('/editSupporter/<id>', methods=['post'])
 def postEditSupporter(id):
     try:
@@ -56,6 +59,44 @@ def postEditSupporter(id):
             sql1 = "select * from Users where id='{0}'".format(id)
             curs.execute(sql1)
             rows = curs.fetchone()
+            return redirect(url_for('listSupporter_blp.getListSupporter'))
+    except Exception as e:
+        raise (e)
+@listSupperter_blp.route('/addSupporter', methods=['get'])
+def getaddSupporter():
+    if 'username' in session:
+        pagetitle = 'Thêm kỹ thuật viên'
+        title = 'Thêm kỹ thuật viên'
+        username = session['username']
+        avatar = session['avatar']
+        return render_template('admin/addSupporter.html', pagetitle=pagetitle, title=title, username=username, avatar=avatar)
+    else:
+        return redirect(url_for('login_blp.getLogin'))
+
+@listSupperter_blp.route('/addSupporter', methods=['POST'])
+def postaddSupporter():
+    try:
+        username = request.form.get('inputUsername', None)
+        firstname = request.form.get('inputFirstname', None)
+        lastname = request.form.get('inputLastname', None)
+        email = request.form.get('inputEmail', None)
+        phone = request.form.get('inputPhone', None)
+        levels = request.form.get('inputLevels', None)
+        birthday = request.form.get('inputBirthday', None)
+        password = request.form.get('inputPassword', None)
+        hashpassword = generate_password_hash(password)
+        sql0 = "select count(*) from Users where userName = '{0}'".format(username)
+        curs.execute(sql0)
+        rows = curs.fetchone()
+        if rows and rows[0] > 0:
+            pagetitle = 'Thêm kỹ thuật viên'
+            errors = 'Tên đăng nhập đã tồn tại!'
+            return render_template('admin/addSupporter.html', errors=errors, pagetitle=pagetitle)
+        elif username and email and password:
+            sql1 = "insert into Users(firstName, lastName, userName, email, passWord,phone, levels, birthDay) values ('{0}', '{1}', '{2}', " \
+                   "'{3}', '{4}','{5}','{6}','{7}')".format(firstname, lastname, username, email, hashpassword, phone, levels, birthday)
+            curs.execute(sql1)
+            conn.commit()
             return redirect(url_for('listSupporter_blp.getListSupporter'))
     except Exception as e:
         raise (e)

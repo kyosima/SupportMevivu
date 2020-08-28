@@ -13,8 +13,19 @@ def logout():
 @login_blp.route('/login', methods=['GET'])
 def getLogin():
     if 'username' in session:
+        username = session['username']
+        avatar = session['avatar']
+        sql = "select levels from Users where userName='{0}'".format(username)
+        curs.execute(sql)
+        rows = curs.fetchone()
+        level = rows[0]
+        if level == 1:
+            return render_template('admin/index.html', username=username, avatar=avatar)
+        if level == 2:
+            return render_template('Supporter/indexSupporter.html', username=username, avatar=avatar)
+        if level == 3:
+            return render_template('admin/index.html', username=username, avatar=avatar)
 
-        return render_template('admin/index.html')
     else:
         title = 'Đăng nhập'
         return render_template('admin/login.html', title=title)
@@ -51,7 +62,7 @@ def postLogin():
             hashpassword_supporter = rows1[0]
             if check_password_hash(hashpassword_supporter, _password):
                 session['username'] = _username
-                return 'Tài khoản của supporter '
+                return render_template('Supporter/indexSupporter.html')
             else:
                 errors = 'Wrong username or password!'
                 return render_template('admin/login.html', errors=errors)

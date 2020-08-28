@@ -8,6 +8,8 @@ profile_blp = Blueprint('profile_blp', __name__)
 
 
 @profile_blp.route('/editPassword', methods=['GET'])
+
+
 def getEditpassword():
     if 'username' in session:
         username = session['username']
@@ -23,7 +25,7 @@ def getEditpassword():
         pagetitle = 'Thông tin'
         title = 'Thông tin'
         return render_template('admin/editPassword.html', firstname=firstname, lastname=lastname, avatar=avatar,
-                               pagetitle=pagetitle, title=title)
+                               pagetitle=pagetitle, title=title, username=username)
     else:
         return redirect(url_for('login_blp.getLogin'))
 
@@ -70,14 +72,18 @@ def getProfile():
         title = 'Thông tin'
         if role == 1:
             level = 'Admin'
+            return render_template('admin/profile.html', title=title, pagetitle=pagetitle, username=username,
+                                   email=email,
+                                   createdDate=createdDate,
+                                   firstname=firstname, lastname=lastname, role=level, phone=phone, avatar=avatar,
+                                   birthday=birthday)
         elif role == 2:
             level = 'Kỹ thuật viên'
+            return render_template('Supporter/profileSupporter.html', email=email, title=title, pagetitle=pagetitle, username=username, avatar=avatar, role=level, phone=phone, birthday=birthday, createdDate=createdDate, firstname=firstname, lastname=lastname)
         elif role == 3:
-            level = 'Khách hàng'
-        return render_template('admin/profile.html', title=title, pagetitle=pagetitle, username=username, email=email,
-                               createdDate=createdDate,
-                               firstname=firstname, lastname=lastname,role=level, phone=phone, avatar=avatar,
-                               birthday=birthday)
+
+            return 'ko duoc'
+
     else:
         return redirect(url_for('login_blp.getLogin'))
 
@@ -99,11 +105,21 @@ def getEditProfile():
         avatar = rows[10]
         birthday = rows[11]
         pagetitle = 'Thay đổi thông tin'
-
-        return render_template('admin/editProfile.html', pagetitle=pagetitle, email=email, username=username,
-                               password=password,
-                               firstname=firstname, lastname=lastname, phone=phone, role=role, birthday=birthday,
-                               avatar=avatar)
+        if role == 1:
+            return render_template('admin/editProfile.html', pagetitle=pagetitle, email=email, username=username,
+                                   password=password,
+                                   firstname=firstname, lastname=lastname, phone=phone, role=role, birthday=birthday,
+                                   avatar=avatar)
+        elif role == 2:
+            return render_template('Supporter/editProfileSupporter.html', pagetitle=pagetitle, email=email, username=username,
+                                   password=password,
+                                   firstname=firstname, lastname=lastname, phone=phone, role=role, birthday=birthday,
+                                   avatar=avatar)
+        elif role == 3:
+            return render_template('admin/editProfile.html', pagetitle=pagetitle, email=email, username=username,
+                                   password=password,
+                                   firstname=firstname, lastname=lastname, phone=phone, role=role, birthday=birthday,
+                                   avatar=avatar)
     else:
         return redirect(url_for('profile_blp.getLogin'))
 
@@ -118,7 +134,6 @@ def postEditProfile():
                 _avatar = request.files["image"]
                 filename = secure_filename(_avatar.filename)
                 _avatar.save(os.path.join(app.config["IMAGE_UPLOADS"], filename))
-
                 sql = "update Users set avatar='{0}' where userName = '{1}'".format(filename, username)
                 curs.execute(sql)
                 conn.commit()

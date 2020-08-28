@@ -16,7 +16,8 @@ def getListCustomer():
         sql0 = "select * from Users where levels ='3'"
         curs.execute(sql0)
         rows = curs.fetchall()
-        return render_template('admin/listCustomer.html', pagetitle=pagetitle, title=title, rows=rows)
+        avatar = session['avatar']
+        return render_template('admin/listCustomer.html', pagetitle=pagetitle, title=title, rows=rows, username=username, avatar=avatar)
     else:
         return redirect(url_for('login_blp.getLogin'))
 
@@ -30,15 +31,16 @@ def getEditCustomer(id):
         sql0 = "select * from Users where id='{0}'".format(id)
         curs.execute(sql0)
         rows = curs.fetchone()
-        username = rows[1]
+        userName = rows[1]
         email = rows[2]
         firstname = rows[6]
         lastname = rows[7]
         phone = rows[8]
         levels = rows[9]
         birthday = rows[11]
-        return render_template('admin/editCustomer.html', pagetittle=pagetittle, title=title, username=username,
-                               email=email, firstname=firstname, lastname=lastname, levels=levels,phone=phone, birthday=birthday)
+        avatar = session['avatar']
+        return render_template('admin/editCustomer.html', username=username, avatar=avatar, pagetittle=pagetittle, title=title, userName=userName,
+                               email=email, firstname=firstname, lastname=lastname, levels=levels, phone=phone, birthday=birthday)
 @listCustomer_blp.route('/editCustomer/<id>', methods=['post'])
 def postEditCustomer(id):
     try:
@@ -63,6 +65,45 @@ def postEditCustomer(id):
             phone = rows[8]
             levels = rows[9]
             birthday = rows[11]
+            return redirect(url_for('listCustomer_blp.getListCustomer'))
+    except Exception as e:
+        raise (e)
+
+@listCustomer_blp.route('/addCustomer', methods=['get'])
+def getaddCustomer():
+    if 'username' in session:
+        pagetitle = 'Thêm khách hàng'
+        title = 'Thêm khách hàng'
+        username = session['username']
+        avatar = session['avatar']
+        return render_template('admin/addCustomer.html', pagetitle=pagetitle, title=title, username=username, avatar=avatar)
+    else:
+        return redirect(url_for('login_blp.getLogin'))
+
+@listCustomer_blp.route('/addCustomer', methods=['POST'])
+def postaddCustomer():
+    try:
+        username = request.form.get('inputUsername', None)
+        firstname = request.form.get('inputFirstname', None)
+        lastname = request.form.get('inputLastname', None)
+        email = request.form.get('inputEmail', None)
+        phone = request.form.get('inputPhone', None)
+        levels = request.form.get('inputLevels', None)
+        birthday = request.form.get('inputBirthday', None)
+        password = request.form.get('inputPassword', None)
+        hashpassword = generate_password_hash(password)
+        sql0 = "select count(*) from Users where userName = '{0}'".format(username)
+        curs.execute(sql0)
+        rows = curs.fetchone()
+        if rows and rows[0] > 0:
+            pagetitle = 'Thêm khách hàng'
+            errors = 'Tên đăng nhập đã tồn tại!'
+            return render_template('admin/addCustomer.html', errors=errors, pagetitle=pagetitle)
+        elif username and email and password:
+            sql1 = "insert into Users(firstName, lastName, userName, email, passWord,phone, levels, birthDay) values ('{0}', '{1}', '{2}', " \
+                   "'{3}', '{4}','{5}','{6}','{7}')".format(firstname, lastname, username, email, hashpassword, phone, levels, birthday)
+            curs.execute(sql1)
+            conn.commit()
             return redirect(url_for('listCustomer_blp.getListCustomer'))
     except Exception as e:
         raise (e)

@@ -23,7 +23,7 @@ def postRegister():
         _email = request.form.get('inputEmail', None)
         _password = request.form.get('inputPassword', None)
         _hashpassword = generate_password_hash(_password)
-        sql0 = "select count(*) from Users where username = '{0}'".format(_username)
+        sql0 = "select count(*) from Users where userName = '{0}'".format(_username)
         curs.execute(sql0)
         rows = curs.fetchone()
         if rows and rows[0] > 0:

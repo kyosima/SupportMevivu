@@ -85,7 +85,7 @@
                                             <div class="form-group">
                                         <label class="col-md-12 control-label">*Tên đăng nhập:</label>
                                         <div class="col-md-12">
-                                            <input class="form-control" type="text" value="{{ usernamesp }}" name="inputUsername" readonly >
+                                            <input class="form-control" type="text" value="" name="inputUsername" required>
                                         </div>
                                     </div>
                                         </div>
@@ -94,19 +94,36 @@
                                         <label class="col-lg-12 control-label">*Email:</label>
                                         <div class="col-lg-12">
                                             <input class="form-control" type="text"
-                                                   name="inputEmail" value="{{ email }}">
+                                                   name="inputEmail" required>
                                         </div>
                                     </div>
                                         </div>
                                     </div>
-
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-12">
+                                           <div class="form-group">
+                                        <label class="col-md-12 control-label">*Password:</label>
+                                        <div class="col-md-12">
+                                            <input class="form-control" type="password" value="" name="inputPassword" required>
+                                        </div>
+                                    </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="form-group">
+                                        <label class="col-md-12 control-label">*Confirm Password:</label>
+                                        <div class="col-md-12">
+                                            <input class="form-control" type="password" value="" name="inputPassword2" required>
+                                        </div>
+                                    </div>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-6 col-sm-12">
                                            <div class="form-group">
                                         <label class="col-lg-12 control-label">Họ và tên đệm:</label>
                                         <div class="col-lg-12">
                                             <input class="form-control" type="text"
-                                                   name="inputFirstname" value="{{ firstname }}">
+                                                   name="inputFirstname">
                                         </div>
                                     </div>
                                         </div>
@@ -115,7 +132,7 @@
                                         <label class="col-lg-12 control-label">Tên:</label>
                                         <div class="col-lg-12">
                                             <input class="form-control" type="text"
-                                                   name="inputLastname" value="{{ lastname }}">
+                                                   name="inputLastname">
                                         </div>
                                     </div>
                                         </div>
@@ -126,7 +143,7 @@
                                         <label class="col-lg-12 control-label">Số điện thoại:</label>
                                         <div class="col-lg-12">
                                             <input class="form-control" type="number"
-                                                   name="inputPhone" value="{{ phone }}">
+                                                   name="inputPhone">
                                         </div>
                                     </div>
                                         </div>
@@ -136,9 +153,7 @@
                                         <div class="col-md-12">
                                             <select name="inputLevels" id="inputLevels" class="browser-default custom-select">
 
-                                                <option value="1" >Admin</option>
-                                                <option value="2" selected>Kỹ thuật viên</option>
-                                                <option value="3" >Khách hàng</option>
+                                                <option value="3" selected>Khách hàng</option>
 
                                             </select>
 
@@ -153,7 +168,7 @@
                                     <div class="form-group">
                                         <label class="col-md-12 control-label">Ngày sinh:</label>
                                         <div class="col-md-12">
-                                            <input class="form-control" type="date" name="inputBirthday" value="{{ birthday }}">
+                                            <input class="form-control" type="date" name="inputBirthday">
                                         </div>
                                     </div>
 
@@ -165,7 +180,7 @@
                                             <button type="submit"  name="submit" class="btn btn-primary" value="SaveProfile">Save
                                             </button>
                                             <span></span>
-                                            <button type="reset" onclick="window.location.href='/listSupporter'"
+                                            <button type="reset" onclick="window.location.href='/listCustomer'"
                                                     class="btn btn-default" value="Cancel">Cancel
                                             </button>
                                         </div>
