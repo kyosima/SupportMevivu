@@ -43,14 +43,13 @@ def getEditCustomer(id):
         lastname = rows[7]
         phone = rows[8]
         levels = rows[9]
-        birthday = rows[11]
         avatar = session['avatar']
         sql1 = "select levels from Users where userName='{0}'".format(username)
         curs.execute(sql1)
         level = curs.fetchone()
         if level[0] == 1:
             return render_template('admin/editCustomer.html', username=username, avatar=avatar, pagetittle=pagetittle, title=title, userName=userName,
-                               email=email, firstname=firstname, lastname=lastname, levels=levels, phone=phone, birthday=birthday)
+                               email=email, firstname=firstname, lastname=lastname, levels=levels, phone=phone)
         else:
             return '404 - Not Found. Bạn không thể truy cập vào trang này'
 @listCustomer_blp.route('/editCustomer/<id>', methods=['post'])
@@ -63,8 +62,7 @@ def postEditCustomer(id):
             _inputemail = request.form.get('inputEmail',None)
             _inputphone = request.form.get('inputPhone',None)
             _inputlevels = request.form.get('inputLevels',None)
-            _inputbirthday = request.form.get('inputBirthday', None)
-            sql0 = "Update Users set firstName = '{0}', lastName = '{1}', email = '{2}', phone = '{3}', levels = '{4}', birthDay='{5}' where id='{6}'".format(_inputfirstname, _inputlastname, _inputemail, _inputphone, _inputlevels,_inputbirthday, id)
+            sql0 = "Update Users set firstName = '{0}', lastName = '{1}', email = '{2}', phone = '{3}', levels = '{4}' where id='{5}'".format(_inputfirstname, _inputlastname, _inputemail, _inputphone, _inputlevels, id)
             curs.execute(sql0)
             conn.commit()
             sql1 = "select * from Users where id='{0}'".format(id)
@@ -76,7 +74,6 @@ def postEditCustomer(id):
             lastname = rows[7]
             phone = rows[8]
             levels = rows[9]
-            birthday = rows[11]
             return redirect(url_for('listCustomer_blp.getListCustomer'))
     except Exception as e:
         raise (e)
@@ -107,7 +104,6 @@ def postaddCustomer():
         email = request.form.get('inputEmail', None)
         phone = request.form.get('inputPhone', None)
         levels = request.form.get('inputLevels', None)
-        birthday = request.form.get('inputBirthday', None)
         password = request.form.get('inputPassword', None)
         hashpassword = generate_password_hash(password)
         sql0 = "select count(*) from Users where userName = '{0}'".format(username)
@@ -118,8 +114,8 @@ def postaddCustomer():
             errors = 'Tên đăng nhập đã tồn tại!'
             return render_template('admin/addCustomer.html', errors=errors, pagetitle=pagetitle)
         elif username and email and password:
-            sql1 = "insert into Users(firstName, lastName, userName, email, passWord,phone, levels, birthDay) values ('{0}', '{1}', '{2}', " \
-                   "'{3}', '{4}','{5}','{6}','{7}')".format(firstname, lastname, username, email, hashpassword, phone, levels, birthday)
+            sql1 = "insert into Users(firstName, lastName, userName, email, passWord,phone, levels) values ('{0}', '{1}', '{2}', " \
+                   "'{3}', '{4}','{5}','{6}')".format(firstname, lastname, username, email, hashpassword, phone, levels)
             curs.execute(sql1)
             conn.commit()
             return redirect(url_for('listCustomer_blp.getListCustomer'))

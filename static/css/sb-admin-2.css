@@ -281,7 +281,12 @@ button:not(:disabled),
 [type="submit"]:not(:disabled) {
   cursor: pointer;
 }
-
+.dataTables_filter{
+  float: right !important;
+}
+#dataTables_filter{
+  float: right;
+}
 button::-moz-focus-inner,
 [type="button"]::-moz-focus-inner,
 [type="reset"]::-moz-focus-inner,

@@ -21,6 +21,9 @@
         <link rel="stylesheet" href="/static/css/style.css">
         <link href="/static/css/sb-admin-2.min.css" rel="stylesheet">
         <link rel="stylesheet" href="/static/js/level.js">
+          <link href="/static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+
 
 
     </head>
@@ -760,6 +763,7 @@
 </div>
 
 <!-- Bootstrap core JavaScript-->
+{% block script %}
 <script src="/static/vendor/jquery/jquery.min.js"></script>
 <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
@@ -775,6 +779,8 @@
 <!-- Page level custom scripts -->
 <script src="/static/js/demo/chart-area-demo.js"></script>
 <script src="/static/js/demo/chart-pie-demo.js"></script>
+{% endblock %}
+
 
 </body>
 
