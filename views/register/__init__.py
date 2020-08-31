@@ -7,8 +7,19 @@ register_blp = Blueprint('register_blp', __name__)
 @register_blp.route('/register', methods=['GET'])
 def getRegister():
     if 'username' in session:
-        title = 'Đăng '
-        return render_template('admin/index.html', title=title)
+        title = 'Đăng ký'
+        username = session['username']
+        sql = "select levels from Users where userName='{0}'".format(username)
+        curs.execute(sql)
+        rows = curs.fetchone()
+        if rows[0] == 1:
+            return render_template('admin/index.html', title=title)
+        elif rows[0] == 2:
+            return render_template('Supporter/indexSupporter.html', title=title)
+        elif rows[0] == 3:
+            return render_template('Customer/indexCustomer.html',title=title)
+
+
     else:
         return render_template('admin/register.html')
 

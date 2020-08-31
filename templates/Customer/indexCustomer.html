@@ -21,9 +21,15 @@
         <link rel="stylesheet" href="/static/css/style.css">
         <link href="/static/css/sb-admin-2.min.css" rel="stylesheet">
         <link rel="stylesheet" href="/static/js/level.js">
-
+        <link rel="stylesheet" href="/static/css/style.css">
 
     </head>
+    <style>
+    .tieude{
+        float: left;
+        font-size: 15px;
+    }
+    </style>
 
 {% endblock %}
 
@@ -41,7 +47,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3"> Admin <sup></sup></div>
+                <div class="sidebar-brand-text mx-3 tieude">Khách hàng <sup></sup></div>
             </a>
 
             <!-- Divider -->
@@ -78,22 +84,7 @@
                     </div>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo1"
-                   aria-expanded="true" aria-controls="collapseTwo1">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Danh sách</span>
-                </a>
-                <div id="collapseTwo1" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
 
-                        <a class="collapse-item" href="/listSupporter">Danh sách kỹ thuật viên</a>
-                        <a class="collapse-item" href="/listCustomer">Danh sách khách hàng</a>
-                        <a class="collapse-item" href="/addSupporter">Thêm kỹ thuật viên</a>
-                        <a class="collapse-item" href="/addCustomer">Thêm khách hàng</a>
-                    </div>
-                </div>
-            </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
@@ -136,7 +127,7 @@
                         <a class="collapse-item" href="../forgot-password.html">Forgot Password</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="../Supporter/404.html">404 Page</a>
+                        <a class="collapse-item" href="404.html">404 Page</a>
                         <a class="collapse-item" href="../blank.html">Blank Page</a>
                     </div>
                 </div>

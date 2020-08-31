@@ -42,7 +42,9 @@ def index():
         level = row_lv[0]
         if level == 1:
             return render_template('admin/index.html', username=username, title = title, avatar=avatar, firstname=firstname, lastname=lastname, pagetitle=pagetitle, ava= ava, sp = row_sp[0], customer = row_customer[0])
-        if level == 2:
+        elif level == 2:
             return render_template('Supporter/indexSupporter.html', username=username, title = title, avatar=avatar, firstname=firstname, lastname=lastname, pagetitle=pagetitle, ava= ava, sp = row_sp[0], customer = row_customer[0])
+        elif level == 3:
+            return render_template('Customer/indexCustomer.html', username=username, title = title, avatar=avatar, firstname=firstname, lastname=lastname, pagetitle=pagetitle, ava= ava, sp = row_sp[0], customer = row_customer[0])
     else:
         return redirect(url_for('login_blp.getLogin'))

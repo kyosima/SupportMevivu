@@ -24,8 +24,19 @@ def getEditpassword():
 
         pagetitle = 'Thông tin'
         title = 'Thông tin'
-        return render_template('admin/editPassword.html', firstname=firstname, lastname=lastname, avatar=avatar,
+        spl1 = "select levels from Users where userName='{0}'".format(username)
+        curs.execute(spl1)
+        level = curs.fetchone()
+        if level[0] == 1:
+            return render_template('admin/editPassword.html', firstname=firstname, lastname=lastname, avatar=avatar,
                                pagetitle=pagetitle, title=title, username=username)
+        elif level[0] == 2:
+            return render_template('Supporter/editPasswordSupporter.html', firstname=firstname, lastname=lastname, avatar=avatar,
+                                   pagetitle=pagetitle, title=title, username=username)
+        elif level[0] == 3:
+            return render_template('Customer/editPasswordCustomer.html', firstname=firstname, lastname=lastname, avatar=avatar,
+                                   pagetitle=pagetitle, title=title, username=username)
+
     else:
         return redirect(url_for('login_blp.getLogin'))
 
@@ -81,8 +92,12 @@ def getProfile():
             level = 'Kỹ thuật viên'
             return render_template('Supporter/profileSupporter.html', email=email, title=title, pagetitle=pagetitle, username=username, avatar=avatar, role=level, phone=phone, birthday=birthday, createdDate=createdDate, firstname=firstname, lastname=lastname)
         elif role == 3:
-
-            return 'ko duoc'
+            level = 'Khách hàng'
+            return render_template('Customer/profileCustomer.html', title=title, pagetitle=pagetitle, username=username,
+                                   email=email,
+                                   createdDate=createdDate,
+                                   firstname=firstname, lastname=lastname, role=level, phone=phone, avatar=avatar,
+                                   birthday=birthday)
 
     else:
         return redirect(url_for('login_blp.getLogin'))
@@ -116,7 +131,7 @@ def getEditProfile():
                                    firstname=firstname, lastname=lastname, phone=phone, role=role, birthday=birthday,
                                    avatar=avatar)
         elif role == 3:
-            return render_template('admin/editProfile.html', pagetitle=pagetitle, email=email, username=username,
+            return render_template('Customer/editProfileCustomer.html', pagetitle=pagetitle, email=email, username=username,
                                    password=password,
                                    firstname=firstname, lastname=lastname, phone=phone, role=role, birthday=birthday,
                                    avatar=avatar)
@@ -130,13 +145,13 @@ def postEditProfile():
         if request.form['submit'] == 'SaveAvatar':
             if request.files:
                 username = session['username']
-
                 _avatar = request.files["image"]
                 filename = secure_filename(_avatar.filename)
                 _avatar.save(os.path.join(app.config["IMAGE_UPLOADS"], filename))
                 sql = "update Users set avatar='{0}' where userName = '{1}'".format(filename, username)
                 curs.execute(sql)
                 conn.commit()
+                print(filename)
                 return redirect(url_for('profile_blp.getProfile'))
 
         elif request.form['submit'] == 'SaveProfile':
@@ -153,9 +168,9 @@ def postEditProfile():
             curs.execute(sql0)
             rows = curs.fetchone()
             hashedpassword = rows[0]
-            sql = "update Users set firstName = '{0}', lastName='{1}', email='{2}', phone='{3}', levels ='{4}'," \
-                  "birthDay='{5}' where userName = '{6}'".format(
-                _firstname, _lastname, _email, _phone, _role, _birthday, username)
+            sql = "update Users set firstName = '{0}', lastName='{1}', email='{2}', phone='{3}'," \
+                  "birthDay='{4}' where userName = '{5}'".format(
+                _firstname, _lastname, _email, _phone,  _birthday, username)
             curs.execute(sql)
             conn.commit()
             return redirect(url_for('profile_blp.getProfile'))

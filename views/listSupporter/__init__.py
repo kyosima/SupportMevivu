@@ -18,7 +18,13 @@ def getListSupporter():
         curs.execute(sql0)
         rows = curs.fetchall()
         avatar = session['avatar']
-        return render_template('admin/listSupporter.html', pagetitle=pagetitle, title=title, rows=rows, custombutton=custombutton, avatar=avatar, username=username)
+        sql1 = "select levels from Users where userName = '{0}'".format(username)
+        curs.execute(sql1)
+        level = curs.fetchone()
+        if level[0] == 1:
+            return render_template('admin/listSupporter.html', pagetitle=pagetitle, title=title, rows=rows, custombutton=custombutton, avatar=avatar, username=username)
+        else:
+            return "404 - Not Found. Bạn không được phép truy cập vào trang này!"
     else:
         return redirect(url_for('login_blp.getLogin'))
 
@@ -40,8 +46,14 @@ def getEditSupporter(id):
         levels = rows[9]
         birthday = rows[11]
         avatar = session['avatar']
-        return render_template('admin/editSupporter.html', avatar=avatar, usernamesp=usernamesp, pagetittle=pagetittle, title=title, username=username,
+        sql1 = "select levels from Users where userName = '{0}'".format(username)
+        curs.execute(sql1)
+        level = curs.fetchone()
+        if level[0] == 1:
+            return render_template('admin/editSupporter.html', avatar=avatar, usernamesp=usernamesp, pagetittle=pagetittle, title=title, username=username,
                                email=email, firstname=firstname, lastname=lastname, levels=levels, phone=phone, birthday=birthday)
+        else:
+            return "404- Not Found. Bạn không có quyền đăng nhập vào trang này"
 @listSupperter_blp.route('/editSupporter/<id>', methods=['post'])
 def postEditSupporter(id):
     try:
@@ -69,7 +81,13 @@ def getaddSupporter():
         title = 'Thêm kỹ thuật viên'
         username = session['username']
         avatar = session['avatar']
-        return render_template('admin/addSupporter.html', pagetitle=pagetitle, title=title, username=username, avatar=avatar)
+        sql = "select levels from Users where userName='{0}'".format(username)
+        curs.execute(sql)
+        level = curs.fetchone()
+        if level[0] == 1:
+            return render_template('admin/addSupporter.html', pagetitle=pagetitle, title=title, username=username, avatar=avatar)
+        else:
+            return '404 - Not Found. Bạn không có quyền truy cập vào trang này'
     else:
         return redirect(url_for('login_blp.getLogin'))
 

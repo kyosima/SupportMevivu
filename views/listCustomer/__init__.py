@@ -17,7 +17,13 @@ def getListCustomer():
         curs.execute(sql0)
         rows = curs.fetchall()
         avatar = session['avatar']
-        return render_template('admin/listCustomer.html', pagetitle=pagetitle, title=title, rows=rows, username=username, avatar=avatar)
+        sql1  = "select levels from Users where userName = '{0}'".format(username)
+        curs.execute(sql1)
+        level = curs.fetchone()
+        if level[0] ==1:
+            return render_template('admin/listCustomer.html', pagetitle=pagetitle, title=title, rows=rows, username=username, avatar=avatar)
+        else:
+            return "404 - Not Found. Bạn không có quyền truy cập vào trang này"
     else:
         return redirect(url_for('login_blp.getLogin'))
 
@@ -39,8 +45,14 @@ def getEditCustomer(id):
         levels = rows[9]
         birthday = rows[11]
         avatar = session['avatar']
-        return render_template('admin/editCustomer.html', username=username, avatar=avatar, pagetittle=pagetittle, title=title, userName=userName,
+        sql1 = "select levels from Users where userName='{0}'".format(username)
+        curs.execute(sql1)
+        level = curs.fetchone()
+        if level[0] == 1:
+            return render_template('admin/editCustomer.html', username=username, avatar=avatar, pagetittle=pagetittle, title=title, userName=userName,
                                email=email, firstname=firstname, lastname=lastname, levels=levels, phone=phone, birthday=birthday)
+        else:
+            return '404 - Not Found. Bạn không thể truy cập vào trang này'
 @listCustomer_blp.route('/editCustomer/<id>', methods=['post'])
 def postEditCustomer(id):
     try:
@@ -76,7 +88,13 @@ def getaddCustomer():
         title = 'Thêm khách hàng'
         username = session['username']
         avatar = session['avatar']
-        return render_template('admin/addCustomer.html', pagetitle=pagetitle, title=title, username=username, avatar=avatar)
+        sql = "select levels from Users where userName='{0}'".format(username)
+        curs.execute(sql)
+        level = curs.fetchone()
+        if level[0] == 1:
+            return render_template('admin/addCustomer.html', pagetitle=pagetitle, title=title, username=username, avatar=avatar)
+        else:
+            return '404 Not Found. Bạn không thể truy cập vào trang này'
     else:
         return redirect(url_for('login_blp.getLogin'))
 
