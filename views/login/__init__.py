@@ -69,7 +69,7 @@ def postLogin():
             hashpassword_customer = rows2[0]
             if check_password_hash(hashpassword_customer, _password):
                 session['username'] = _username
-                return 'Tài khoản customer '
+                return redirect(url_for('index_blp.index'))
             else:
                 errors = 'Wrong username or password!'
                 return render_template('admin/login.html', errors=errors)

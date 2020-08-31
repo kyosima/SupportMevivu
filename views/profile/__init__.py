@@ -78,7 +78,7 @@ def getProfile():
         phone = rows[8]
         role = rows[9]
         avatar = rows[10]
-        birthday = rows[11]
+
         pagetitle = 'Thông tin'
         title = 'Thông tin'
         if role == 1:
@@ -86,18 +86,18 @@ def getProfile():
             return render_template('admin/profile.html', title=title, pagetitle=pagetitle, username=username,
                                    email=email,
                                    createdDate=createdDate,
-                                   firstname=firstname, lastname=lastname, role=level, phone=phone, avatar=avatar,
-                                   birthday=birthday)
+                                   firstname=firstname, lastname=lastname, role=level, phone=phone, avatar=avatar
+                                )
         elif role == 2:
             level = 'Kỹ thuật viên'
-            return render_template('Supporter/profileSupporter.html', email=email, title=title, pagetitle=pagetitle, username=username, avatar=avatar, role=level, phone=phone, birthday=birthday, createdDate=createdDate, firstname=firstname, lastname=lastname)
+            return render_template('Supporter/profileSupporter.html', email=email, title=title, pagetitle=pagetitle, username=username, avatar=avatar, role=level, phone=phone, createdDate=createdDate, firstname=firstname, lastname=lastname)
         elif role == 3:
             level = 'Khách hàng'
             return render_template('Customer/profileCustomer.html', title=title, pagetitle=pagetitle, username=username,
                                    email=email,
                                    createdDate=createdDate,
-                                   firstname=firstname, lastname=lastname, role=level, phone=phone, avatar=avatar,
-                                   birthday=birthday)
+                                   firstname=firstname, lastname=lastname, role=level, phone=phone, avatar=avatar
+                                   )
 
     else:
         return redirect(url_for('login_blp.getLogin'))
@@ -118,22 +118,22 @@ def getEditProfile():
         phone = rows[8]
         role = rows[9]
         avatar = rows[10]
-        birthday = rows[11]
+
         pagetitle = 'Thay đổi thông tin'
         if role == 1:
             return render_template('admin/editProfile.html', pagetitle=pagetitle, email=email, username=username,
                                    password=password,
-                                   firstname=firstname, lastname=lastname, phone=phone, role=role, birthday=birthday,
+                                   firstname=firstname, lastname=lastname, phone=phone, role=role,
                                    avatar=avatar)
         elif role == 2:
             return render_template('Supporter/editProfileSupporter.html', pagetitle=pagetitle, email=email, username=username,
                                    password=password,
-                                   firstname=firstname, lastname=lastname, phone=phone, role=role, birthday=birthday,
+                                   firstname=firstname, lastname=lastname, phone=phone, role=role,
                                    avatar=avatar)
         elif role == 3:
             return render_template('Customer/editProfileCustomer.html', pagetitle=pagetitle, email=email, username=username,
                                    password=password,
-                                   firstname=firstname, lastname=lastname, phone=phone, role=role, birthday=birthday,
+                                   firstname=firstname, lastname=lastname, phone=phone, role=role,
                                    avatar=avatar)
     else:
         return redirect(url_for('profile_blp.getLogin'))
@@ -163,14 +163,12 @@ def postEditProfile():
             _role = request.form.get('inputRole', None)
             _avatar1 = request.form.get('inputAvatar', None)
 
-            _birthday = request.form.get('inputBirthday', None)
             sql0 = "select passWord from Users where userName='{0}'".format(username)
             curs.execute(sql0)
             rows = curs.fetchone()
             hashedpassword = rows[0]
-            sql = "update Users set firstName = '{0}', lastName='{1}', email='{2}', phone='{3}'," \
-                  "birthDay='{4}' where userName = '{5}'".format(
-                _firstname, _lastname, _email, _phone,  _birthday, username)
+            sql = "update Users set firstName = '{0}', lastName='{1}', email='{2}', phone='{3}' where userName = '{4}'".format(
+                _firstname, _lastname, _email, _phone,  username)
             curs.execute(sql)
             conn.commit()
             return redirect(url_for('profile_blp.getProfile'))
