@@ -19,7 +19,7 @@ def getLogin():
         rows = curs.fetchone()
         level = rows[0]
         if level == 1:
-            return render_template('admin/index.html', username=username)
+            return render_template('adcmin/index.html', username=username)
         if level == 2:
             return render_template('Supporter/indexSupporter.html', username=username)
         if level == 3:
