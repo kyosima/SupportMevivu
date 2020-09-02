@@ -11,7 +11,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Danh sách yêu cầu</title>
+        <title>Danh sách yêu cầu chưa xử lý</title>
 
         <!-- Custom fonts for this template -->
         <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -412,15 +412,15 @@
 
                                     <tbody>
 
-                                    {% for ofSupporter in ofSupporters %}
+                                    {% for requirement in requirements_on %}
                                         <tr>
-                                            <td>{{ ofSupporter[2] }}</td>
-                                            <td>{{ ofSupporter[3] }}</td>
-                                            <td class=""><span class="text trangthaiyeucau">{{ ofSupporter[5] }}</span>
+                                            <td>{{ requirement[2] }}</td>
+                                            <td>{{ requirement[3] }}</td>
+                                            <td class=""><span class="text trangthaiyeucau">{{ requirement[5] }}</span>
                                             </td>
-                                            <td>{{ ofSupporter[8] }}</td>
+                                            <td>{{ requirement[8] }}</td>
                                             <td>
-                                                {{ ofSupporter[0] +" "+ ofSupporter[1] }}
+                                                {{ requirement[0] +" "+ requirement[1] }}
                                             </td>
                                             <td><a href="">Xem chi tiết</a></td>
                                         </tr>
