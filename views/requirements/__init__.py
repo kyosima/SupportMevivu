@@ -19,9 +19,10 @@ def requirements():
         # sql1 = "select * from Requirements"
         # curs.execute(sql1)
         # infos = curs.fetchall()
-        sql2 = "select Users.firstName, Users.lastName, Requirements.* from Users inner join Requirements on Requirements.Users_id = Users.id "
+        sql2 = "select Users.firstName, Users.lastName, Requirements.* from Users inner join Requirements on Requirements.Users_idSupporter = Users.id "
         curs.execute(sql2)
         ofSupporters = curs.fetchall()
+        print(ofSupporters[0])
 
         if level == 1:
             return render_template('admin/requirements.html',ofSupporters=ofSupporters, title=title, pagetitle=pagetitle, username=username)
@@ -38,7 +39,7 @@ def getRequirements_on():
         sql0 = "select levels from Users where userName='{0}'".format(username)
         curs.execute(sql0)
         level = curs.fetchone()
-        sql1 = "select Users.firstName, Users.lastName, Requirements.* from Users inner join Requirements on Requirements.Users_id = Users.id where Requirements.status='1'"
+        sql1 = "select Users.firstName, Users.lastName, Requirements.* from Users inner join Requirements on Requirements.Users_idSupporter = Users.id where Requirements.status='1'"
         curs.execute(sql1)
         requirements_on = curs.fetchall()
         if level[0] == 1:
@@ -55,7 +56,7 @@ def getRequirements_done():
         sql0 = "select levels from Users where userName='{0}'".format(username)
         curs.execute(sql0)
         level = curs.fetchone()
-        sql1 = "select Users.firstName, Users.lastName, Requirements.* from Users inner join Requirements on Requirements.Users_id = Users.id where Requirements.status='2'"
+        sql1 = "select Users.firstName, Users.lastName, Requirements.* from Users inner join Requirements on Requirements.Users_idSupporter = Users.id where Requirements.status='2'"
         curs.execute(sql1)
         ofSupporters = curs.fetchall()
         if level[0] == 1:
