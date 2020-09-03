@@ -20,8 +20,7 @@ def requirements():
         # sql1 = "select * from Requirements"
         # curs.execute(sql1)
         # infos = curs.fetchall()
-        sql2 = "select Users.firstName, Users.lastName, Requirements.* from Requirements join Users on " \
-               "Users.id = Requirements.Users_idSupporter"
+        sql2 = "select * from Users as usold left join Requirements as re on usold.id = re.Users_idSupporter join Users as usnew on usnew.id = re.Users_idCustomer"
         curs.execute(sql2)
         ofSupporters = curs.fetchall()
         print(ofSupporters)
