@@ -1,36 +1,14 @@
 {% extends('admin/index.html') %}
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
 {% block head %}
-    <head>
-
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
-        <meta name="author" content="">
-
-        <title>Danh sách yêu cầu</title>
-
-        <!-- Custom fonts for this template -->
-        <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-              rel="stylesheet">
-
-        <!-- Custom styles for this template -->
-        <link href="/static/css/sb-admin-2.min.css" rel="stylesheet">
-
-        <!-- Custom styles for this page -->
-        <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-
-    </head>
+    {{ super() }}
     <style>
-    body{
-        font-size: 14px !important;
-    }
+        body {
+            font-size: 14px !important;
+        }
+
         .trangthaiyeucau {
             width: 100%;
             background: red;
@@ -42,7 +20,7 @@
         }
     </style>
 {% endblock %}
-
+</head>
 
 <body id="page-top">
 
@@ -392,52 +370,67 @@
 
 
                     <!-- Page Heading -->
-                    <h1 class="mb-2 text-gray-800">Danh sách yêu cầu</h1>
+                    <h3 class="mb-2 text-gray-800">Mã yêu cầu : #SPMEVIVU{{ 2 }}</h3>
 
                     <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Danh sách chi tiết</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                    <tr>
-                                        <th>Mã yêu cầu</th>
-                                        <th>Tiêu đề</th>
-                                        <th>Trạng thái</th>
-                                        <th>Ngày tạo</th>
-                                        <th>Khách hàng</th>
-                                        <th>Kỹ thuật xử lý</th>
-                                        <th>Xem chi tiết</th>
-                                    </tr>
-                                    </thead>
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">{{ rows[3] }}</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p>{{ rows[4] }}</p>
+                                </div>
 
-                                    <tbody>
-
-                                    {% for ofSupporter in ofSupporters %}
-                                        <tr>
-                                            <td>{{ ofSupporter[11] }}</td>
-                                            <td>{{ ofSupporter[12] }}</td>
-                                            <td class=""><span class="text trangthaiyeucau">{{ ofSupporter[14] }}</span>
-                                            </td>
-                                            <td>{{ ofSupporter[16] }}</td>
-
-                                            <td>
-                                                {{ ofSupporter[25] +" "+ ofSupporter[26] }}
-                                            </td>
-                                            <td>
-                                                {{ ofSupporter[6] +" "+ ofSupporter[7] }}
-                                            </td>
-                                            <td><a href="/requirements_detail/{{ ofSupporter[11] }}">Xem chi tiết</a></td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
+                <form class="form-horizontal" name="Requirements" method="post"/>
+                                <div class="row">
+                                        <div class="col-md-4 col-sm-12">
+                                            <div class="form-group">
+                                        <label class="col-md-12 control-label">Trạng thái:</label>
+                                        <div class="col-md-12">
+                                            <input class="form-control trangthaiyeucau1" type="text" value="{{ rows[5] }}" name="inputUsername" readonly>
+                                        </div>
+                                    </div>
+                                        </div>
+
+                                    <div class="col-md-4 col-sm-12">
+                                            <div class="form-group">
+                                        <label class="col-md-12 control-label">Ngày tạo:</label>
+                                        <div class="col-md-12">
+                                            <input class="form-control" type="text" value="{{ rows[7] }}" name="inputUsername" readonly>
+                                        </div>
+                                    </div>
+                                        </div>
+                                    <div class="col-md-4 col-sm-12">
+                                            <div class="form-group">
+                                        <label class="col-md-12 control-label">Khách hàng:</label>
+                                        <div class="col-md-12">
+                                            <input readonly class="form-control" type="text" value="{{ rows[10] +" "+ rows[11] }}" name="inputUsername">
+                                        </div>
+                                    </div>
+                                        </div> <div class="col-md-4 col-sm-12">
+                                            <div class="form-group">
+                                        <label class="col-md-12 control-label">Kỹ thuật xử lý:</label>
+                                        <div class="col-md-12">
+                                            <input readonly class="form-control" type="text" value="{{ rows[0] +" "+rows[1] }}" name="inputUsername">
+                                        </div>
+                                    </div>
+                                        </div>
+                                    <div class="col-md-4 col-sm-12">
+                                            <div class="form-group">
+                                        <label class="col-md-12 control-label">File đính kèm:</label>
+                                        <div class="col-md-12">
+                                            <a href="">{{ rows[6] }}</a>
+                                        </div>
+                                    </div>
+                                        </div>
+
+                                    </div>
+                                </form>
 
                 </div>
             {% endblock %}
@@ -510,13 +503,13 @@
     <script>
         $(document).ready(function () {
 
-            $.each($('.trangthaiyeucau'), function (index, value) {
-                var text = $(value).text();
+            $.each($('.trangthaiyeucau1'), function (index, value) {
+                var text = $(value).val();
                 if (text == "1") {
-                    $(value).text('Chưa xử lý')
+                    $(value).val('Chưa xử lý')
                 } else if (text == "2") {
-                    $(value).text('Đã xử lý')
-                    $(value).css("background-color", "green");
+                    $(value).val('Đã xử lý')
+
                 }
             })
 

@@ -20,10 +20,10 @@ def requirements():
         # sql1 = "select * from Requirements"
         # curs.execute(sql1)
         # infos = curs.fetchall()
-        sql2 = "select * from Users as usold left join Requirements as re on usold.id = re.Users_idSupporter join Users as usnew on usnew.id = re.Users_idCustomer"
+        sql2 = "select * from Users as usold left join Requirements as re on usold.id = re.Users_idSupporter join " \
+               "Users as usnew on usnew.id = re.Users_idCustomer"
         curs.execute(sql2)
         ofSupporters = curs.fetchall()
-        print(ofSupporters)
         if level == 1:
             return render_template('admin/requirements.html', ofSupporters=ofSupporters, title=title,
                                    pagetitle=pagetitle, username=username)
@@ -42,8 +42,8 @@ def getRequirements_on():
         sql0 = "select levels from Users where userName='{0}'".format(username)
         curs.execute(sql0)
         level = curs.fetchone()
-        sql1 = "select Users.firstName, Users.lastName, Requirements.* from Users inner join Requirements on " \
-               "Requirements.Users_idSupporter = Users.id where Requirements.status='1'"
+        sql1 = "select * from Users as usold left join Requirements as re on usold.id = re.Users_idSupporter join " \
+               "Users as usnew on usnew.id = re.Users_idCustomer where re.status='1'"
         curs.execute(sql1)
         requirements_on = curs.fetchall()
         if level[0] == 1:
@@ -62,8 +62,8 @@ def getRequirements_done():
         sql0 = "select levels from Users where userName='{0}'".format(username)
         curs.execute(sql0)
         level = curs.fetchone()
-        sql1 = "select Users.firstName, Users.lastName, Requirements.* from Users inner join Requirements on " \
-               "Requirements.Users_idSupporter = Users.id where Requirements.status='2'"
+        sql1 = "select * from Users as usold left join Requirements as re on usold.id = re.Users_idSupporter join " \
+               "Users as usnew on usnew.id = re.Users_idCustomer where re.status='2'"
         curs.execute(sql1)
         ofSupporters = curs.fetchall()
         if level[0] == 1:
@@ -71,3 +71,20 @@ def getRequirements_done():
                                    ofSupporters=ofSupporters)
         else:
             return '404 Not Found - Bạn không có quyền truy cập vào web này'
+
+@requirements_blp.route('/requirements_detail/<id>', methods=['get'])
+def getRequirementDetail(id):
+    if 'username' in session:
+        title = 'Chi tiết yêu cầu'
+        pagetitle = 'Chi tiết yêu cầu'
+        username = session['username']
+        sql1 = "select usold.firstName, usold.lastName, re.* , usnew.firstName, usnew.lastName from Users as usold left join Requirements as re on usold.id = re.Users_idSupporter join " \
+               "Users as usnew on usnew.id = re.Users_idCustomer where re.id='{0}'".format(id)
+        curs.execute(sql1)
+        rows = curs.fetchone()
+        print(rows)
+        sql0 = "select levels from Users where userName='{0}'".format(username)
+        curs.execute(sql0)
+        level = curs.fetchone()
+        if level[0] == 1:
+            return render_template('admin/requirement_detail.html', rows=rows)

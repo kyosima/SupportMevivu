@@ -45,7 +45,7 @@ CREATE TABLE `requirements` (
 
 LOCK TABLES `requirements` WRITE;
 /*!40000 ALTER TABLE `requirements` DISABLE KEYS */;
-INSERT INTO `requirements` VALUES (5,'yêu cầu 1','Nội dung',1,NULL,'2020-09-03 12:10:03',15,1),(6,'yêu cầu 1','Nội dung',1,NULL,'2020-09-03 12:10:05',15,1),(7,'yêu cầu mới','Nội dung',2,NULL,'2020-09-03 12:23:50',1,1);
+INSERT INTO `requirements` VALUES (5,'yêu cầu 1','Nội dung',1,'File đính kèm','2020-09-03 12:10:03',15,14),(6,'yêu cầu 1','Nội dung',1,NULL,'2020-09-03 12:10:05',15,14),(7,'yêu cầu mới','Nội dung',2,NULL,'2020-09-03 12:23:50',1,8);
 /*!40000 ALTER TABLE `requirements` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -58,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-03 17:32:36
+-- Dump completed on 2020-09-04 15:45:17

@@ -392,7 +392,7 @@
 
 
                     <!-- Page Heading -->
-                    <h1 class="mb-2 text-gray-800">Danh sách yêu cầu</h1>
+                    <h1 class="mb-2 text-gray-800">Danh sách yêu cầu chưa xử lý</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -408,6 +408,7 @@
                                         <th>Tiêu đề</th>
                                         <th>Trạng thái</th>
                                         <th>Ngày tạo</th>
+                                        <th>Khách hàng</th>
                                         <th>Kỹ thuật xử lý</th>
                                         <th>Xem chi tiết</th>
                                     </tr>
@@ -417,14 +418,15 @@
 
                                     {% for requirement in requirements_on %}
                                         <tr>
-                                            <td>{{ requirement[2] }}</td>
-                                            <td>{{ requirement[3] }}</td>
-                                            <td class=""><span class="text trangthaiyeucau">{{ requirement[5] }}</span>
+                                            <td>{{ requirement[11] }}</td>
+                                            <td>{{ requirement[12] }}</td>
+                                            <td class=""><span class="text trangthaiyeucau">{{ requirement[14] }}</span>
                                             </td>
-                                            <td>{{ requirement[7] }}</td>
+                                            <td>{{ requirement[16] }}</td>
                                             <td>
-                                                {{ requirement[0] +" "+ requirement[1] }}
+                                                {{ requirement[25] +" "+ requirement[26] }}
                                             </td>
+                                            <td>{{ requirement[6] +" "+ requirement[7]}}</td>
                                             <td><a href="">Xem chi tiết</a></td>
                                         </tr>
                                     {% endfor %}

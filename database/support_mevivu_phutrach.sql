@@ -16,27 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `khachhang`
+-- Table structure for table `phutrach`
 --
 
-DROP TABLE IF EXISTS `khachhang`;
+DROP TABLE IF EXISTS `phutrach`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `khachhang` (
+CREATE TABLE `phutrach` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `hoten` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `id_Sup` int DEFAULT NULL,
+  `id_Cus` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `Supporter` (`id_Sup`),
+  KEY `Customer` (`id_Cus`),
+  CONSTRAINT `fk_Cus` FOREIGN KEY (`id_Cus`) REFERENCES `users` (`id`),
+  CONSTRAINT `fk_Sup` FOREIGN KEY (`id_Sup`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `khachhang`
+-- Dumping data for table `phutrach`
 --
 
-LOCK TABLES `khachhang` WRITE;
-/*!40000 ALTER TABLE `khachhang` DISABLE KEYS */;
-INSERT INTO `khachhang` VALUES (1,'kyo');
-/*!40000 ALTER TABLE `khachhang` ENABLE KEYS */;
+LOCK TABLES `phutrach` WRITE;
+/*!40000 ALTER TABLE `phutrach` DISABLE KEYS */;
+INSERT INTO `phutrach` VALUES (1,1,1);
+/*!40000 ALTER TABLE `phutrach` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -48,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-03 17:32:36
+-- Dump completed on 2020-09-04 15:45:17

@@ -45,6 +45,8 @@ def postRegister():
                    "'{3}', '{4}')".format(
                 _firstname, _lastname, _username, _email, _hashpassword)
             curs.execute(sql1)
+            # sql2 = "insert into phutrach(id_Sup, id_Cus) values ('1','1')"
+            # curs.execute(sql2)
             conn.commit()
 
             return redirect(url_for('login_blp.getLogin'))
